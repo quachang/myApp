@@ -6,7 +6,7 @@ import 'constants/colors.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/main/chatter_screen.dart';
 import 'screens/main/summit_screen.dart';
-import 'screens/main/add_screen.dart';
+import 'screens/profile/profile_screen.dart';
 import 'screens/main/live_feed_screen.dart';
 import 'screens/main/social/social_screen.dart';
 import 'services/auth_service.dart';
@@ -96,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const ChatterScreen(),
     const SummitScreen(),
-    const AddScreen(),
+    const ProfileScreen(),
     const LiveFeedScreen(),
     const SocialScreen(),
   ];
@@ -104,8 +104,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<String> _titles = [
     'Chatter',
     'Summit',
-    'Create',
-    'Live Feed',
+    'Profile',
+    'Live',
     'Social',
   ];
 
@@ -146,8 +146,8 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Summit',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle, size: 30),
-            label: 'Add',
+            icon: Icon(Icons.person, size: 30),
+            label: 'Profile',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.rss_feed),
