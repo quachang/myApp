@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'constants/colors.dart';
 import 'screens/auth/auth_screen.dart';
-import 'screens/main/polls_screen.dart';
 import 'screens/main/chatter_screen.dart';
+import 'screens/main/summit_screen.dart';
 import 'screens/main/add_screen.dart';
 import 'screens/main/live_feed_screen.dart';
 import 'screens/main/social/social_screen.dart';
@@ -94,16 +94,16 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const PollsScreen(),
     const ChatterScreen(),
+    const SummitScreen(),
     const AddScreen(),
     const LiveFeedScreen(),
     const SocialScreen(),
   ];
 
   final List<String> _titles = [
-    'Polls',
     'Chatter',
+    'Summit',
     'Create',
     'Live Feed',
     'Social',
@@ -138,12 +138,12 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.poll),
-            label: 'Polls',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble),
             label: 'Chatter',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.article),
+            label: 'Summit',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle, size: 30),
