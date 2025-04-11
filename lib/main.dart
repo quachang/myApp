@@ -8,7 +8,7 @@ import 'screens/main/polls_screen.dart';
 import 'screens/main/chatter_screen.dart';
 import 'screens/main/add_screen.dart';
 import 'screens/main/live_feed_screen.dart';
-import 'screens/main/social_screen.dart';
+import 'screens/main/social/social_screen.dart';
 import 'services/auth_service.dart';
 import 'widgets/common/custom_app_bar.dart';
 

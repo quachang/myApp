@@ -20,6 +20,7 @@ dependencies:
   provider: ^6.0.5
   flutter_svg: ^2.0.7
   intl: ^0.18.1
+  uuid: ^4.3.3  # Added for generating unique IDs
 
 dev_dependencies:
   flutter_test:
