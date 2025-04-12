@@ -6,7 +6,7 @@ import 'constants/colors.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/main/chatter_screen.dart';
 import 'screens/main/summit_screen.dart';
-import 'screens/profile/profile_screen.dart';
+import 'screens/main/profile/profile_screen.dart';
 import 'screens/main/live_feed_screen.dart';
 import 'screens/main/social/social_screen.dart';
 import 'services/auth_service.dart';
@@ -112,7 +112,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      // Only show AppBar if not on Profile screen (index 2)
+      appBar: _selectedIndex != 2 ? CustomAppBar(
         title: _selectedIndex == 0 ? 'HARK!' : _titles[_selectedIndex],
         actions: [
           IconButton(
@@ -123,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
             },
           ),
         ],
-      ),
+      ) : null,
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

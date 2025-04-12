@@ -35,10 +35,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (isSearchBar) {
       return _buildSearchAppBar(context);
     }
-    return _buildRegularAppBar(context);
-  }
-
-  AppBar _buildRegularAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
       centerTitle: centerTitle,
@@ -56,14 +52,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
       )
           : leading ??
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black87),
-            onPressed: () {
-              // Navigate to search screen
-              // Navigator.pushNamed(context, AppRoutes.search);
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0), // Add padding to move search icon right
+            child: IconButton(
+              icon: const Icon(Icons.search, color: Colors.black87),
+              onPressed: () {
+                // Navigate to search screen
+                // Navigator.pushNamed(context, AppRoutes.search);
+              },
+            ),
           ),
-      actions: actions,
+      actions: actions != null ?
+      [Padding(
+        padding: const EdgeInsets.only(right: 17.0), // Add left padding to move action buttons left
+        child: Row(children: actions!),
+      )] : null,
     );
   }
 
