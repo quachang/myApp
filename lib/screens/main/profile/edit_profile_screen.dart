@@ -8,36 +8,27 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final _userNameController = TextEditingController(text: 'Your Username');
+  final _userNameController = TextEditingController(text: 'Username');
+  final _bioController = TextEditingController();
 
   @override
   void dispose() {
     _userNameController.dispose();
+    _bioController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.9,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      child: Column(
+    return Scaffold(
+      // Use a full Scaffold instead of a container to take full screen
+      body: Column(
         children: [
           // Header with title and buttons
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.only(top: 40, bottom: 12, left: 16, right: 16),
             decoration: BoxDecoration(
               color: Colors.grey.shade800,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
             ),
             child: Row(
               children: [
@@ -122,100 +113,133 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
 
-          // Divider
-          const Divider(height: 1, color: Colors.grey),
-
-          // Form fields
+          // Form fields with enhanced visual separation
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(16),
+              // Use ClampingScrollPhysics to prevent issues with folding phones
+              physics: const ClampingScrollPhysics(),
               children: [
-                // Username field
-                ListTile(
-                  leading: const Icon(Icons.person_outline, color: Colors.grey),
-                  title: TextField(
-                    controller: _userNameController,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Username',
-                    ),
-                  ),
-                ),
-                const Divider(),
-
-                // Background choice
-                ListTile(
-                  leading: const Icon(Icons.palette, color: Colors.grey),
-                  title: const Text('Choose Background'),
-                  subtitle: const Text('(Optional)'),
-                  trailing: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                    ),
-                  ),
-                ),
-                const Divider(),
-
-                // Add to gallery
-                ListTile(
-                  leading: const Icon(Icons.photo_camera, color: Colors.grey),
-                  title: const Text('Add more to the gallery'),
-                ),
-                const Divider(),
-
-                // Bio section
-                const ListTile(
-                  title: Text(
-                    'Bio',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Text('Introduce yourself and your Stories.'),
-                ),
-
-                // Text input area with placeholder
+                // Username field - centered text
                 Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(32),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Text',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.grey.shade300,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    leading: const Icon(Icons.person_outline, color: Colors.grey),
+                    title: Center(
+                      child: TextField(
+                        controller: _userNameController,
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Username',
                         ),
                       ),
-                      Icon(
-                        Icons.touch_app,
-                        size: 64,
-                        color: Colors.grey.shade300,
+                    ),
+                  ),
+                ),
+
+                // Choose Landscape field (moved up, was Add to gallery) - centered text
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    leading: const Icon(Icons.photo_camera, color: Colors.grey),
+                    title: const Center(
+                      child: Text('Choose Landscape'),
+                    ),
+                  ),
+                ),
+
+                // Background choice - centered text, no Optional text
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    leading: const Icon(Icons.palette, color: Colors.grey),
+                    title: const Center(
+                      child: Text('Choose Background'),
+                    ),
+                    trailing: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
                       ),
-                      Text(
-                        'Long press the text to\nembed images',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.grey.shade300,
+                    ),
+                  ),
+                ),
+
+                // Bio section - expanded for user input
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Column(
+                    children: [
+                      const ListTile(
+                        title: Center(
+                          child: Text(
+                            'Bio',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextField(
+                          controller: _bioController,
+                          decoration: const InputDecoration(
+                            hintText: 'Describe yourself...',
+                            border: OutlineInputBorder(),
+                          ),
+                          maxLines: 6,
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                const Divider(),
-
-                // Advanced options
-                ListTile(
-                  leading: const Icon(Icons.settings, color: Colors.grey),
-                  title: const Text('Advanced Options'),
+                // Advanced options - centered text
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      top: BorderSide(color: Colors.grey.shade300, width: 1),
+                      bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const ListTile(
+                    leading: Icon(Icons.settings, color: Colors.grey),
+                    title: Center(
+                      child: Text('Advanced Options'),
+                    ),
+                  ),
                 ),
+
+                // Add extra space at the bottom to ensure scrollability
+                const SizedBox(height: 50),
               ],
             ),
           ),

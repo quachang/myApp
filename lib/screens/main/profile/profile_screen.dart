@@ -85,11 +85,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   // Navigation to edit profile screen
   void _navigateToEditProfile() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const EditProfileScreen(),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => const EditProfileScreen(),
+      ),
     );
   }
 
