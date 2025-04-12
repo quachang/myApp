@@ -96,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const ChatterScreen(),
     const SummitScreen(),
-    const ProfileScreen(),
+    const ProfileScreen(), // Using our new ProfileScreen
     const LiveFeedScreen(),
     const SocialScreen(),
   ];
@@ -116,10 +116,10 @@ class _MainScreenState extends State<MainScreen> {
         title: _selectedIndex == 0 ? 'HARK!' : _titles[_selectedIndex],
         actions: [
           IconButton(
-            icon: const Icon(Icons.person, color: Colors.black87),
+            icon: const Icon(Icons.notifications, color: Colors.black87),
             onPressed: () {
-              // Navigate to profile screen
-              // Navigator.pushNamed(context, AppRoutes.profile);
+              // Navigate to notifications screen
+              // Navigator.pushNamed(context, AppRoutes.notifications);
             },
           ),
         ],
@@ -151,7 +151,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.rss_feed),
-            label: 'Live Feed',
+            label: 'Live',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
