@@ -143,7 +143,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
 
-                // Choose Landscape field (moved up, was Add to gallery) - centered text
+                // Choose Landscape field - centered text
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -160,7 +160,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
 
-                // Background choice - centered text, no Optional text
+                // Background choice - centered text
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -217,24 +217,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                       ),
                     ],
-                  ),
-                ),
-
-                // Advanced options - centered text
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      top: BorderSide(color: Colors.grey.shade300, width: 1),
-                      bottom: BorderSide(color: Colors.grey.shade300, width: 1),
-                    ),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: const ListTile(
-                    leading: Icon(Icons.settings, color: Colors.grey),
-                    title: Center(
-                      child: Text('Advanced Options'),
-                    ),
                   ),
                 ),
 

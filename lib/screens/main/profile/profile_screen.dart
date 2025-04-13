@@ -48,14 +48,19 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   // Handle Copy Link
                   Navigator.pop(context);
                 },
-                child: const Center(
-                  child: Text(
-                    'Copy Link',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.link, size: 20),
+                    SizedBox(width: 10),
+                    Text(
+                      'Copy Link',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               const Divider(height: 1, color: Colors.grey),
@@ -66,14 +71,42 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   Navigator.pop(context);
                   _navigateToEditProfile();
                 },
-                child: const Center(
-                  child: Text(
-                    'Edit My Profile',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.edit, size: 20),
+                    SizedBox(width: 10),
+                    Text(
+                      'Edit My Profile',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: Colors.grey),
+              SimpleDialogOption(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                onPressed: () {
+                  // Handle Settings
+                  Navigator.pop(context);
+                  // Navigate to settings page
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.settings, size: 20),
+                    SizedBox(width: 10),
+                    Text(
+                      'Settings',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -96,14 +129,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white, // Changed from black to white
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Top section with search icon and options
             Container(
               padding: const EdgeInsets.only(top: 35, left: 10, right: 16, bottom: 8),
-              color: Colors.black,
+              color: Colors.white, // Changed from black to white
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -111,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   IconButton(
                     icon: const Icon(
                       Icons.search,
-                      color: Colors.white,
+                      color: Colors.black, // Changed from white to black
                       size: 24,
                     ),
                     onPressed: () {
@@ -119,46 +152,51 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     },
                   ),
 
-                  // Right side icons - 3 dots and notification
-                  Row(
-                    children: [
-                      // Three dots menu with larger size
-                      IconButton(
-                        icon: const Icon(
-                          Icons.more_horiz,
-                          color: Colors.white,
-                          size: 28,  // Increased from 24 to 28
-                        ),
-                        onPressed: _showOptionsMenu,
-                      ),
-                      // Notification icon
-                      IconButton(
-                        icon: const Icon(
-                          Icons.notifications,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                        onPressed: () {
-                          // Handle notification action
-                        },
-                      ),
-                    ],
+                  // Right side - only notification icon remains
+                  IconButton(
+                    icon: const Icon(
+                      Icons.notifications,
+                      color: Colors.black, // Changed from white to black
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      // Handle notification action
+                    },
                   ),
                 ],
               ),
             ),
-            // Profile picture section (with smaller text)
+
+            // Profile picture section with white background
             Container(
-              color: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              color: Colors.white, // Changed from black to white
+              padding: const EdgeInsets.only(top: 0, bottom: 20),
               alignment: Alignment.center,
               child: Column(
                 children: [
+                  // Add the 3 dots at the top of the profile section
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16.0, top: 0, bottom: 0),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.more_horiz,
+                          color: Colors.black, // Changed from white to black
+                          size: 28,
+                        ),
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        onPressed: _showOptionsMenu,
+                      ),
+                    ),
+                  ),
+
                   // Profile picture
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: Colors.grey.shade300, width: 2), // Changed border color
                     ),
                     child: CircleAvatar(
                       radius: 50,
@@ -169,21 +207,21 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
                   const SizedBox(height: 16),
 
-                  // Username - reduced font size
+                  // Username - with black text
                   const Text(
                     'Your Username',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22, // Reduced from 24
+                      color: Colors.black, // Changed from white to black
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
 
                   const SizedBox(height: 8),
 
-                  // Level indicator badge - reduced size
+                  // Level indicator badge
                   Container(
-                    height: 24, // Reduced from 28
+                    height: 24,
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
                     decoration: BoxDecoration(
                       color: Colors.blue,
@@ -193,8 +231,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          width: 18, // Reduced from 20
-                          height: 18, // Reduced from 20
+                          width: 18,
+                          height: 18,
                           decoration: BoxDecoration(
                             color: Colors.red,
                             shape: BoxShape.circle,
@@ -205,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                             '5',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 9, // Reduced from 10
+                              fontSize: 9,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -215,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           'Jester',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 13, // Reduced from 14
+                            fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -226,81 +264,88 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               ),
             ),
 
-            // Stats section with smaller numbers
+            // Stats section with updated 'Aura' text
             Container(
-              color: Colors.black,
+              color: Colors.white, // Changed from black to white
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatColumn('97', 'Reputation'),
+                  _buildStatColumn('97', 'Aura'), // Changed from 'Reputation' to 'Aura'
                   _buildStatColumn('2', 'Following'),
                   _buildStatColumn('5', 'Followers'),
                 ],
               ),
             ),
 
-            // Bio section - centered and without "Bio" header
+            // Bio section with lighter background
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
-              color: Colors.grey.shade900,
+              color: Colors.grey.shade100, // Changed from grey.shade900 to grey.shade100
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center, // Center alignment
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Only keep the member since text, remove the "Tap here" text
                   Text(
                     'Member since June 2018 (6 years, 294 days)',
                     style: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontSize: 12, // Reduced from 14 to 12
+                      color: Colors.grey.shade700, // Changed from grey.shade400 to grey.shade700
+                      fontSize: 12,
                     ),
-                    textAlign: TextAlign.center, // Center aligned text
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
 
-            // Tab Bar
+            // Tab Bar with updated tab labels
             Container(
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Colors.white, // Changed from black to white
               ),
               child: TabBar(
                 controller: _tabController,
-                indicatorColor: Colors.white,
+                indicatorColor: AppColors.primary, // Changed from white to primary color
                 dividerColor: Colors.transparent,
-                labelColor: Colors.white,
+                labelColor: Colors.black, // Changed from white to black
                 unselectedLabelColor: Colors.grey,
                 indicatorSize: TabBarIndicatorSize.label,
                 tabs: const [
                   Tab(text: 'Posts 4'),
-                  Tab(text: 'Wall 3'),
-                  Tab(text: 'Saved Posts'),
+                  Tab(text: 'Artifacts'), // Changed from 'Wall 3' to 'Artifacts'
+                  Tab(text: 'Saved Items'), // Changed from 'Saved Posts' to 'Saved Items'
                 ],
               ),
             ),
 
-            // My Communities section (changed from My Wiki Entries)
+            // My Communities section with lighter background
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              color: Colors.grey.shade900,
+              color: Colors.grey.shade100, // Changed from grey.shade900 to grey.shade100
               child: Row(
                 children: [
-                  const Text(
+                  Text(
                     'My Communities',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black, // Changed from white to black
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.grey.shade600, size: 16),
+                  Icon(Icons.arrow_forward_ios, color: Colors.grey.shade700, size: 16), // Changed icon color
                 ],
               ),
             ),
           ],
         ),
+      ),
+      // Add floating action button
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Handle create action
+        },
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -313,8 +358,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           Text(
             count,
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 28, // Smaller font size
+              color: Colors.black, // Changed from white to black
+              fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -322,7 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           Text(
             title,
             style: TextStyle(
-              color: Colors.grey.shade400,
+              color: Colors.grey.shade700, // Changed from grey.shade400 to grey.shade700
               fontSize: 14,
             ),
           ),
