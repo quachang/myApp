@@ -95,17 +95,17 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     const ChatterScreen(),
-    const SummitScreen(),
+    // const SummitScreen(),
     const ProfileScreen(), // Using our new ProfileScreen
-    const LiveFeedScreen(),
+    // const LiveFeedScreen(),
     const SocialScreen(),
   ];
 
   final List<String> _titles = [
     'Chatter',
-    'Summit',
+    // 'Summit',
     'Profile',
-    'Live',
+    // 'Live',
     'Social',
   ];
 
@@ -113,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Only show AppBar if not on Profile screen (index 2)
-      appBar: _selectedIndex != 2 ? CustomAppBar(
+      appBar: _selectedIndex != 1 ? CustomAppBar(
         title: _selectedIndex == 0 ? 'HARK!' : _titles[_selectedIndex],
         actions: [
           IconButton(
@@ -142,18 +142,18 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.chat_bubble),
             label: 'Chatter',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.article),
-            label: 'Summit',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.article),
+          //   label: 'Summit',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person, size: 30),
             label: 'Profile',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.rss_feed),
-            label: 'Live',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.rss_feed),
+          //   label: 'Live',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
             label: 'Social',

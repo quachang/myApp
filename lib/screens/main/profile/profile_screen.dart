@@ -17,6 +17,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   bool _isLoading = false;
   late TabController _tabController;
 
+  String _customBioText = '';
+
   @override
   void initState() {
     super.initState();
@@ -127,7 +129,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => const EditProfileScreen(),
+        builder: (context) => EditProfileScreen(
+          initialBio: _customBioText,
+          onSave: (newBio) {
+            setState(() {
+              _customBioText = newBio;
+            });
+          },
+        ),
       ),
     );
   }
@@ -297,18 +306,33 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
-              color: Colors.grey.shade100, // Changed from grey.shade900 to grey.shade100
+              color: Colors.grey.shade100,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // Static "Member since" text
                   Text(
                     'Member since June 2018 (6 years, 294 days)',
                     style: TextStyle(
-                      color: Colors.grey.shade700, // Changed from grey.shade400 to grey.shade700
+                      color: Colors.grey.shade700,
                       fontSize: 12,
                     ),
                     textAlign: TextAlign.center,
                   ),
+
+                  // Only show the custom bio if it's not empty
+                  if (_customBioText.isNotEmpty) ...[
+                    const SizedBox(height: 8), // Add some space between texts
+                    Text(
+                      _customBioText,
+                      style: TextStyle(
+                        color: Colors.black87, // Darker color
+                        fontSize: 14, // Slightly larger
+                        fontWeight: FontWeight.w500, // Bolder
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -361,7 +385,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           // Handle create action
         },
         backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.black87),
       ),
     );
   }

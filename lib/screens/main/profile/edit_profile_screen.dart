@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  final String initialBio;
+  final Function(String) onSave;
+
+  const EditProfileScreen({
+    Key? key,
+    this.initialBio = '',
+    required this.onSave,
+  }) : super(key: key);
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -10,6 +17,13 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _userNameController = TextEditingController(text: 'Username');
   final _bioController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the bio controller with the passed-in value
+    _bioController.text = widget.initialBio;
+  }
 
   @override
   void dispose() {
@@ -39,7 +53,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 const Expanded(
                   child: Center(
                     child: Text(
-                      'My Profile',
+                      'Edit My Profile',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -57,13 +71,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 IconButton(
                   icon: const Icon(Icons.check, color: Colors.white),
                   onPressed: () {
-                    // Save changes
+                    // Call the onSave callback with the updated bio
+                    widget.onSave(_bioController.text);
                     Navigator.pop(context);
                   },
                 ),
               ],
             ),
           ),
+
 
           // Profile picture edit section
           Container(

@@ -25,6 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        centerTitle: true, // Add this line to center the title
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
