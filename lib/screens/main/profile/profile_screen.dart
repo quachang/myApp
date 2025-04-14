@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/styles.dart';
@@ -6,7 +7,12 @@ import 'edit_profile_screen.dart';
 import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final Function(String?)? onProfileImageChanged;
+
+  const ProfileScreen({
+    Key? key,
+    this.onProfileImageChanged,
+  }) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -17,7 +23,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   bool _isLoading = false;
   late TabController _tabController;
 
+  String _username = 'New User';
   String _customBioText = '';
+  String? _profileImagePath;
 
   @override
   void initState() {
@@ -123,17 +131,28 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       },
     );
   }
+  void _updateProfileImage(String? imagePath) {
+    if (widget.onProfileImageChanged != null) {
+      widget.onProfileImageChanged!(imagePath);
+    }
+  }
 
-  // Navigation to edit profile screen
+  // Update the _navigateToEditProfile method
   void _navigateToEditProfile() {
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) => EditProfileScreen(
+          initialUsername: _username,
           initialBio: _customBioText,
-          onSave: (newBio) {
+          profileImagePath: _profileImagePath,
+          onSave: (newUsername, newBio, newImagePath) {
             setState(() {
+              _username = newUsername;
               _customBioText = newBio;
+              _profileImagePath = newImagePath;
+              // Call the callback to update the navigation bar
+              _updateProfileImage(newImagePath);
             });
           },
         ),
@@ -144,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Changed from black to white
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -211,22 +230,24 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey.shade300, width: 2), // Changed border color
+                      border: Border.all(color: Colors.grey.shade300, width: 2),
                     ),
                     child: CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.grey.shade300,
-                      backgroundImage: const NetworkImage('https://via.placeholder.com/120x120'),
+                      backgroundImage: _profileImagePath != null
+                          ? FileImage(File(_profileImagePath!))
+                          : const NetworkImage('https://via.placeholder.com/120x120') as ImageProvider,
                     ),
                   ),
 
                   const SizedBox(height: 16),
 
                   // Username - with black text
-                  const Text(
-                    'Your Username',
-                    style: TextStyle(
-                      color: Colors.black, // Changed from white to black
+                  Text(
+                    _username,
+                    style: const TextStyle(
+                      color: Colors.black,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
@@ -302,7 +323,55 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               ),
             ),
 
-            // Bio section with lighter background
+            // My Communities section with white color but still visually distinct
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), // Made skinnier
+              decoration: BoxDecoration(
+                color: Colors.white, // Changed to white
+                borderRadius: BorderRadius.circular(8), // Adding rounded corners
+                border: Border.all(color: Colors.grey.shade300), // Adding a border
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Added margin for better separation
+              child: InkWell(
+                onTap: () {
+                  // Handle navigation to Communities
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Navigating to My Communities'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.people,
+                      color: AppColors.primary, // Using your primary app color for the icon
+                      size: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'My Communities',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    Icon(Icons.arrow_forward_ios, color: AppColors.primary, size: 16), // Using primary color for arrow
+                  ],
+                ),
+              ),
+            ),
+            // Bio section with lighter background (MOVED DOWN)
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -353,26 +422,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   Tab(text: 'Posts 4'),
                   Tab(text: 'Artifacts'), // Changed from 'Wall 3' to 'Artifacts'
                   Tab(text: 'Saved Items'), // Changed from 'Saved Posts' to 'Saved Items'
-                ],
-              ),
-            ),
-
-            // My Communities section with lighter background
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              color: Colors.grey.shade100, // Changed from grey.shade900 to grey.shade100
-              child: Row(
-                children: [
-                  Text(
-                    'My Communities',
-                    style: TextStyle(
-                      color: Colors.black, // Changed from white to black
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: Colors.grey.shade700, size: 16), // Changed icon color
                 ],
               ),
             ),
