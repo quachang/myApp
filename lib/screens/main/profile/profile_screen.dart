@@ -3,6 +3,7 @@ import '../../../constants/colors.dart';
 import '../../../constants/styles.dart';
 import '../../../services/auth_service.dart';
 import 'edit_profile_screen.dart';
+import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -90,9 +91,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               SimpleDialogOption(
                 padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 onPressed: () {
-                  // Handle Settings
+                  // Navigate to Settings
                   Navigator.pop(context);
-                  // Navigate to settings page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    ),
+                  );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -264,15 +270,25 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               ),
             ),
 
-            // Stats section with updated 'Aura' text
+            // Stats section with 'Following' centered
             Container(
-              color: Colors.white, // Changed from black to white
+              color: Colors.white,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatColumn('97', 'Aura'), // Changed from 'Reputation' to 'Aura'
-                  _buildStatColumn('2', 'Following'),
-                  _buildStatColumn('5', 'Followers'),
+                  Expanded(
+                    flex: 1,
+                    child: _buildStatColumn('97', 'Aura'),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: _buildStatColumn('2', 'Following'),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _buildStatColumn('5', 'Followers'),
+                  ),
                 ],
               ),
             ),
