@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/styles.dart';
 import '../../../services/auth_service.dart';
-import 'edit_profile_screen.dart';
-import 'settings_screen.dart';
+import 'actions/edit_profile_screen.dart';
+import 'actions/settings_screen.dart';
 
 // Importing new modular components
 import 'tabs/profile_posts_tab.dart';

@@ -93,9 +93,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  String? _profileImagePath; // Add this to track the profile image
+  String? _profileImagePath; // Track the profile image
+  // String _username = 'New User'; // Commented out - username variable
 
-  // Add a method to update the profile image
+  // Update method to handle profile image changes
   void updateProfileImage(String? imagePath) {
     setState(() {
       _profileImagePath = imagePath;
@@ -104,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Create the screens list with a callback for the profile screen
+    // Create the screens list with the original callback
     final List<Widget> _screens = [
       const ChatterScreen(),
       ProfileScreen(
@@ -135,7 +136,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ) : null,
       body: _screens[_selectedIndex],
-      // Replace standard BottomNavigationBar with custom implementation
+      // Updated BottomNavigationBar without username
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none, // Important - allows content to overflow
         alignment: Alignment.bottomCenter,
@@ -168,7 +169,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
 
-          // Elevated profile button
+          // Elevated profile button without username overlay
           Positioned(
             top: -15, // Move up by 15 pixels to stand out from the bar
             child: GestureDetector(
@@ -199,12 +200,45 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
+
+          // Username text section commented out
+          /*
+          // Username text positioned to slightly overlay the profile image
+          Positioned(
+            bottom: 0, // Position at the bottom of the stack
+            child: Text(
+              _username,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: _selectedIndex == 1 ? AppColors.primary : Colors.grey.shade700,
+                // Multiple shadows for better legibility over any background
+                shadows: [
+                  // Light outer glow
+                  Shadow(
+                    offset: Offset(0, 0.5),
+                    blurRadius: 2.0,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                  // Subtle dark shadow for depth
+                  Shadow(
+                    offset: Offset(0, 0.5),
+                    blurRadius: 1.0,
+                    color: Colors.black.withOpacity(0.3),
+                  ),
+                ],
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          */
         ],
       ),
     );
   }
 
-// Helper method for creating navigation items
+  // Helper method for creating navigation items
   Widget _buildNavItem(int index, IconData icon, String label) {
     final bool isSelected = _selectedIndex == index;
 

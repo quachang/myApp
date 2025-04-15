@@ -99,7 +99,7 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 const Text(
-                  'Jester',
+                  'Garden Snail',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 13,
