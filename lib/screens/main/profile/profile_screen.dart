@@ -37,10 +37,15 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   String _username = 'New User';
   String _customBioText = '';
+  String? _websiteUrl;
   String? _profileImagePath;
   String? _backgroundImagePath;
   Color _themeColor = const Color(0xFFEAD78D); // Default theme color (AppColors.primary)
   bool _useDarkTextOnBackground = true; // Default to dark text for yellow
+
+  // Background color and contrast for tab area
+  late Color _backgroundThemeColor;
+  bool _useWhiteTextOnTabBackground = false;
 
   @override
   void initState() {
@@ -51,7 +56,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         setState(() {});
       }
     });
-
+    // Initialize background theme color and text contrast
+    _backgroundThemeColor = _getBackgroundColorFromTheme(_themeColor);
+    _calculateTabTextColor();
     // Set status bar to transparent to allow background to show
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -109,6 +116,22 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     return whiteContrast > blackContrast ? whiteContrast : -blackContrast;
   }
 
+  // Helper method to get background color from theme (Option 2)
+  Color _getBackgroundColorFromTheme(Color themeColor) {
+    // Create a very faint/dark version of the theme color
+    return themeColor.withOpacity(0.1);
+  }
+
+  // Method to determine text color for tab area
+  void _calculateTabTextColor() {
+    // Calculate contrast for the tab background color
+    final double contrast = _calculateContrastRatio(_backgroundThemeColor);
+
+    // If contrast is positive, white has better contrast
+    // If negative, black has better contrast
+    _useWhiteTextOnTabBackground = contrast > 0;
+  }
+
   // Method to determine text color based on theme color
   void _determineTextColorForTheme() {
     // Calculate contrast
@@ -124,6 +147,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: _useDarkTextOnBackground ? Brightness.dark : Brightness.light,
       ));
+      // Update background theme color and recalculate tab text colors
+      _backgroundThemeColor = _getBackgroundColorFromTheme(_themeColor);
+      _calculateTabTextColor();
     });
   }
 
@@ -188,6 +214,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: _useDarkTextOnBackground ? Brightness.dark : Brightness.light,
           ));
+          // Update background theme color and recalculate tab text colors
+          _backgroundThemeColor = _getBackgroundColorFromTheme(_themeColor);
+          _calculateTabTextColor();
         });
       }
     } catch (e) {
@@ -304,12 +333,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           profileImagePath: _profileImagePath,
           backgroundImagePath: _backgroundImagePath,
           themeColor: _themeColor,
-          onSave: (newUsername, newBio, newImagePath, newBackgroundImagePath, newThemeColor) {
+          initialWebsite: _websiteUrl, // Add this parameter
+          onSave: (newUsername, newBio, newImagePath, newBackgroundImagePath, newThemeColor, newWebsiteUrl) {
             setState(() {
               _username = newUsername;
               _customBioText = newBio;
               _profileImagePath = newImagePath;
               _backgroundImagePath = newBackgroundImagePath;
+              _websiteUrl = newWebsiteUrl; // Store the website URL
 
               // Check if theme color changed
               bool themeColorChanged = _themeColor != newThemeColor;
@@ -336,11 +367,62 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     }
   }
 
+  // Helper method for creating stat columns with dynamic text color
+  Widget _buildStatColumn(String count, String title, Color textColor, List<Shadow> shadows) {
+    return Column(
+      children: [
+        Text(
+          count,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            shadows: shadows,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          title,
+          style: TextStyle(
+            color: textColor.withOpacity(0.9),
+            fontSize: 14,
+            shadows: shadows,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper method to wrap tab content with theme-appropriate styling
+  Widget _buildTabContent(Widget tabContent, Color textColor) {
+    return Theme(
+      // Override the text theme colors for all content inside the tab
+      data: Theme.of(context).copyWith(
+        textTheme: Theme.of(context).textTheme.apply(
+          bodyColor: textColor,
+          displayColor: textColor,
+        ),
+        cardTheme: CardTheme(
+          color: _useWhiteTextOnTabBackground
+              ? Colors.black.withOpacity(0.4) // Darker cards for light text
+              : Colors.white.withOpacity(0.9), // Light cards for dark text
+        ),
+      ),
+      child: tabContent,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Determine text color based on analysis
     final Color textColor = _useDarkTextOnBackground ? Colors.black87 : Colors.white;
     final Color iconColor = _useDarkTextOnBackground ? Colors.black87 : Colors.white;
+
+    // Determine text color for tab area based on background theme color
+    final Color tabTextColor = _useWhiteTextOnTabBackground ? Colors.white : Colors.black87;
+    final Color unselectedTabTextColor = _useWhiteTextOnTabBackground
+        ? Colors.white.withOpacity(0.6)
+        : Colors.black87.withOpacity(0.5);
 
     // Configure text shadow based on text color
     final List<Shadow> textShadows = _useDarkTextOnBackground
@@ -360,7 +442,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     ];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: _backgroundThemeColor,
       // Remove app bar to allow background image to cover the top
       body: ListView(
         padding: EdgeInsets.zero,
@@ -637,6 +719,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           ProfileBio(
             bioText: _customBioText,
             themeColor: _themeColor,
+            websiteUrl: _websiteUrl,
           ),
 
           // Tab Bar for Posts, Artifacts, Saved Items
@@ -697,32 +780,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         backgroundColor: _themeColor,
         child: const Icon(Icons.add, color: Colors.black87),
       ),
-    );
-  }
-
-  // Helper method for creating stat columns with dynamic text color
-  Widget _buildStatColumn(String count, String title, Color textColor, List<Shadow> shadows) {
-    return Column(
-      children: [
-        Text(
-          count,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            shadows: shadows,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          title,
-          style: TextStyle(
-            color: textColor.withOpacity(0.9),
-            fontSize: 14,
-            shadows: shadows,
-          ),
-        ),
-      ],
     );
   }
 }

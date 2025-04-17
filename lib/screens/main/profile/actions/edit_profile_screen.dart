@@ -10,7 +10,8 @@ class EditProfileScreen extends StatefulWidget {
   final String? profileImagePath;
   final String? backgroundImagePath;
   final Color themeColor;
-  final Function(String, String, String?, String?, Color) onSave;
+  final String? initialWebsite; // Add new parameter
+  final Function(String, String, String?, String?, Color, String?) onSave; // Update callback signature
 
   const EditProfileScreen({
     Key? key,
@@ -19,6 +20,7 @@ class EditProfileScreen extends StatefulWidget {
     this.profileImagePath,
     this.backgroundImagePath,
     this.themeColor = const Color(0xFFEAD78D),
+    this.initialWebsite, // Initialize the new parameter
     required this.onSave,
   }) : super(key: key);
 
@@ -29,6 +31,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _usernameController;
   late TextEditingController _bioController;
+  late TextEditingController _websiteController;
   String? _selectedImagePath;
   String? _selectedBackgroundImagePath;
   Color _selectedThemeColor = const Color(0xFFEAD78D);
@@ -38,12 +41,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final FocusNode _usernameFocus = FocusNode();
   final FocusNode _bioFocus = FocusNode();
+  final FocusNode _websiteFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _usernameController = TextEditingController(text: widget.initialUsername);
     _bioController = TextEditingController(text: widget.initialBio);
+    _websiteController = TextEditingController(text: widget.initialWebsite ?? ''); // Add this line
     _selectedImagePath = widget.profileImagePath;
     _selectedBackgroundImagePath = widget.backgroundImagePath;
     _selectedThemeColor = widget.themeColor;
@@ -53,6 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void dispose() {
     _usernameController.dispose();
     _bioController.dispose();
+    _websiteController.dispose(); // Add this line
     _usernameFocus.dispose();
     _bioFocus.dispose();
     super.dispose();
@@ -61,6 +67,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void _unfocus() {
     _usernameFocus.unfocus();
     _bioFocus.unfocus();
+    _websiteFocus.unfocus();
   }
 
   Future<void> _showImagePickerOptions(bool isProfileImage) async {
@@ -175,12 +182,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _isLoading = true;
       });
 
+      // Get website value (empty string will be treated as null)
+      final websiteValue = _websiteController.text.trim().isEmpty
+          ? null
+          : _websiteController.text.trim();
+
       widget.onSave(
         _usernameController.text.trim(),
         _bioController.text.trim(),
         _selectedImagePath,
         _selectedBackgroundImagePath,
         _selectedThemeColor,
+        websiteValue, // Add the website value as the sixth parameter
       );
 
       setState(() {
@@ -209,8 +222,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               padding: const EdgeInsets.only(right: 8.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: _selectedThemeColor,
+                  color: Colors.white, // Static white color for the Save button
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade300), // Adding a light border for better visibility
                 ),
                 child: TextButton(
                   onPressed: _isLoading ? null : _saveProfile,
@@ -444,40 +458,162 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   const SizedBox(height: 20),
 
                   // Username Field
-                  TextFormField(
-                    controller: _usernameController,
-                    focusNode: _usernameFocus,
-                    decoration: InputDecoration(
-                      labelText: 'Username',
-                      hintText: 'Enter your username',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
                     ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Username cannot be empty';
-                      }
-                      return null;
-                    },
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Username',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: _usernameController,
+                          focusNode: _usernameFocus,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your username',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: _selectedThemeColor),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Username cannot be empty';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 20),
 
                   // Bio Field
-                  TextFormField(
-                    controller: _bioController,
-                    focusNode: _bioFocus,
-                    decoration: InputDecoration(
-                      labelText: 'Bio',
-                      hintText: 'Tell us about yourself',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      alignLabelWithHint: true,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
                     ),
-                    maxLines: 4,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Bio',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: _bioController,
+                          focusNode: _bioFocus,
+                          decoration: InputDecoration(
+                            hintText: 'Tell us about yourself',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: _selectedThemeColor),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            alignLabelWithHint: true,
+                          ),
+                          maxLines: 4,
+                        ),
+                      ],
+                    ),
                   ),
+
+                  // Website Field
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Website',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: _websiteController,
+                          focusNode: _websiteFocus,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your website URL (optional)',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: _selectedThemeColor),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: Icon(Icons.link, color: Colors.grey.shade600),
+                          ),
+                          // No validator needed as the field is optional
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Your website will be displayed on your profile when provided.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
 
                   const SizedBox(height: 20),
 

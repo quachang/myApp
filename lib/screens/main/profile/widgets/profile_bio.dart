@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
 
 class ProfileBio extends StatefulWidget {
   final String bioText;
-  final Color themeColor; // Add theme color parameter
+  final Color themeColor;
+  final String? websiteUrl;
 
   const ProfileBio({
     Key? key,
     required this.bioText,
-    this.themeColor = const Color(0xFFEAD78D), // Default to AppColors.primary
+    this.themeColor = const Color(0xFFEAD78D),
+    this.websiteUrl,
   }) : super(key: key);
 
   @override
@@ -49,6 +52,37 @@ class _ProfileBioState extends State<ProfileBio> with SingleTickerProviderStateM
     });
   }
 
+  // Method to open URLs
+  Future<void> _launchUrl(String urlString) async {
+    // Ensure URL has a scheme (http/https)
+    final String urlToLaunch = urlString.startsWith('http')
+        ? urlString
+        : 'https://$urlString';
+
+    final Uri url = Uri.parse(urlToLaunch);
+
+    try {
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        // Show error if URL can't be launched
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open $urlToLaunch'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      // Show error if any exception occurs
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error opening link: $e'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -79,7 +113,7 @@ class _ProfileBioState extends State<ProfileBio> with SingleTickerProviderStateM
                   child: Icon(
                     Icons.keyboard_arrow_down,
                     size: 16,
-                    color: widget.themeColor, // Use theme color for icon
+                    color: widget.themeColor,
                   ),
                 ),
               ],
@@ -117,9 +151,11 @@ class _ProfileBioState extends State<ProfileBio> with SingleTickerProviderStateM
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildInfoItem(Icons.location_on, 'New York, USA'),
-                        const SizedBox(width: 24),
-                        _buildInfoItem(Icons.link, 'mywebsite.com'),
+                        _buildInfoItem(Icons.location_on, 'New York, USA', null),
+                        if (widget.websiteUrl != null && widget.websiteUrl!.isNotEmpty) ...[
+                          const SizedBox(width: 24),
+                          _buildInfoItem(Icons.link, widget.websiteUrl!, widget.websiteUrl),
+                        ],
                       ],
                     ),
                   ],
@@ -150,24 +186,32 @@ class _ProfileBioState extends State<ProfileBio> with SingleTickerProviderStateM
     );
   }
 
-  Widget _buildInfoItem(IconData icon, String text) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 16,
-          color: widget.themeColor, // Use theme color for icon
+  Widget _buildInfoItem(IconData icon, String text, String? linkUrl) {
+    return InkWell(
+      onTap: linkUrl != null ? () => _launchUrl(linkUrl) : null,
+      borderRadius: BorderRadius.circular(4),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: widget.themeColor,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.black87,
+                decoration: linkUrl != null ? TextDecoration.underline : TextDecoration.none, // Underline links
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 13,
-            color: Colors.grey.shade700,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

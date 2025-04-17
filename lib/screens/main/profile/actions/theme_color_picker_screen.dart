@@ -97,14 +97,17 @@ class _ThemeColorPickerScreenState extends State<ThemeColorPickerScreen> {
             style: TextStyle(color: Colors.black), // Changed text color to black for contrast
           ),
         ),
-        leading: TextButton(
+        leading: IconButton(
+          icon: Text(
+            'Cancel',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+            ),
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(
-            'Cancel', // Fixed the Cancel text to be on one line
-            style: TextStyle(color: Colors.black), // Changed text color to black
-          ),
         ),
         actions: [
           TextButton(
