@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class ProfileBio extends StatefulWidget {
   final String bioText;
+  final Color themeColor; // Add theme color parameter
 
   const ProfileBio({
     Key? key,
     required this.bioText,
+    this.themeColor = const Color(0xFFEAD78D), // Default to AppColors.primary
   }) : super(key: key);
 
   @override
@@ -77,7 +79,7 @@ class _ProfileBioState extends State<ProfileBio> with SingleTickerProviderStateM
                   child: Icon(
                     Icons.keyboard_arrow_down,
                     size: 16,
-                    color: Colors.grey.shade700,
+                    color: widget.themeColor, // Use theme color for icon
                   ),
                 ),
               ],
@@ -155,7 +157,7 @@ class _ProfileBioState extends State<ProfileBio> with SingleTickerProviderStateM
         Icon(
           icon,
           size: 16,
-          color: Colors.grey.shade700,
+          color: widget.themeColor, // Use theme color for icon
         ),
         const SizedBox(width: 4),
         Text(

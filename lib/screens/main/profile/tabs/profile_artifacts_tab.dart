@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../../constants/colors.dart';
 
 class ProfileArtifactsTab extends StatelessWidget {
-  const ProfileArtifactsTab({Key? key}) : super(key: key);
+  final Color themeColor; // Add theme color parameter
+
+  const ProfileArtifactsTab({
+    Key? key,
+    this.themeColor = const Color(0xFFEAD78D), // Default to AppColors.primary
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

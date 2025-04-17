@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
 import 'constants/colors.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/main/chatter_screen.dart';
-import 'screens/main/summit_screen.dart';
 import 'screens/main/profile/profile_screen.dart';
-import 'screens/main/live_feed_screen.dart';
 import 'screens/main/social/social_screen.dart';
 import 'services/auth_service.dart';
 import 'widgets/common/custom_app_bar.dart';
@@ -94,7 +91,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   String? _profileImagePath; // Track the profile image
-  // String _username = 'New User'; // Commented out - username variable
 
   // Update method to handle profile image changes
   void updateProfileImage(String? imagePath) {
@@ -200,39 +196,6 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-
-          // Username text section commented out
-          /*
-          // Username text positioned to slightly overlay the profile image
-          Positioned(
-            bottom: 0, // Position at the bottom of the stack
-            child: Text(
-              _username,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: _selectedIndex == 1 ? AppColors.primary : Colors.grey.shade700,
-                // Multiple shadows for better legibility over any background
-                shadows: [
-                  // Light outer glow
-                  Shadow(
-                    offset: Offset(0, 0.5),
-                    blurRadius: 2.0,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                  // Subtle dark shadow for depth
-                  Shadow(
-                    offset: Offset(0, 0.5),
-                    blurRadius: 1.0,
-                    color: Colors.black.withOpacity(0.3),
-                  ),
-                ],
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          */
         ],
       ),
     );

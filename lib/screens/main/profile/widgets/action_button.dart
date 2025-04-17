@@ -4,6 +4,7 @@ class ActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final String count;
+  final Color themeColor; // Add theme color parameter
   final VoidCallback? onPressed;
 
   const ActionButton({
@@ -11,6 +12,7 @@ class ActionButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.count,
+    this.themeColor = const Color(0xFFEAD78D), // Default to AppColors.primary
     this.onPressed,
   }) : super(key: key);
 
@@ -23,7 +25,7 @@ class ActionButton extends StatelessWidget {
           Icon(
             icon,
             size: 20,
-            color: Colors.grey.shade700,
+            color: themeColor, // Use theme color for icon
           ),
           const SizedBox(width: 4),
           Text(

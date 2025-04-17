@@ -4,10 +4,12 @@ import '../widgets/action_button.dart';
 
 class ProfilePostsTab extends StatelessWidget {
   final String? profileImagePath;
+  final Color themeColor; // Add theme color parameter
 
   const ProfilePostsTab({
     Key? key,
     this.profileImagePath,
+    this.themeColor = const Color(0xFFEAD78D), // Default to AppColors.primary
   }) : super(key: key);
 
   @override
@@ -94,7 +96,7 @@ class ProfilePostsTab extends StatelessWidget {
                     ),
                     const Spacer(),
                     IconButton(
-                      icon: const Icon(Icons.more_vert),
+                      icon: Icon(Icons.more_vert, color: themeColor), // Use theme color
                       onPressed: () {
                         // Show post options
                       },
@@ -117,12 +119,12 @@ class ProfilePostsTab extends StatelessWidget {
                 Container(
                   height: 200,
                   width: double.infinity,
-                  color: Colors.grey.shade300,
+                  color: themeColor.withOpacity(0.1), // Use theme color with opacity
                   child: Center(
                     child: Icon(
                       Icons.image,
                       size: 50,
-                      color: Colors.grey.shade500,
+                      color: themeColor.withOpacity(0.5), // Use theme color with opacity
                     ),
                   ),
                 ),
@@ -137,16 +139,19 @@ class ProfilePostsTab extends StatelessWidget {
                       icon: Icons.thumb_up_outlined,
                       label: 'Like',
                       count: post['likes'].toString(),
+                      themeColor: themeColor, // Pass theme color
                     ),
                     ActionButton(
                       icon: Icons.chat_bubble_outline,
                       label: 'Comment',
                       count: post['comments'].toString(),
+                      themeColor: themeColor, // Pass theme color
                     ),
                     ActionButton(
                       icon: Icons.share_outlined,
                       label: 'Share',
                       count: '',
+                      themeColor: themeColor, // Pass theme color
                     ),
                   ],
                 ),

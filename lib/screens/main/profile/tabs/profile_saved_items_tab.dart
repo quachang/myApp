@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProfileSavedItemsTab extends StatelessWidget {
-  const ProfileSavedItemsTab({Key? key}) : super(key: key);
+  final Color themeColor; // Add theme color parameter
+
+  const ProfileSavedItemsTab({
+    Key? key,
+    this.themeColor = const Color(0xFFEAD78D), // Default to AppColors.primary
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
